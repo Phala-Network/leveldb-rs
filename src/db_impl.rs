@@ -151,8 +151,6 @@ impl DB {
             lw.add_record(&ve.encode())?;
             lw.flush()?;
         }
-
-        // TODO: no effect to resolve the inner rename to delete and create 
         set_current_file(&self.opt.env, &self.path, 1)
     }
 
@@ -1061,6 +1059,7 @@ fn open_info_log<E: Env + ?Sized, P: AsRef<Path>>(env: &E, db: P) -> Logger {
     if let Ok(e) = env.exists(Path::new(&logfilename)) {
         if e {
             let oldlogfilename = db.join("LOG.old");
+            // replace rename usage to reduce big LOG file overload
             cfg_if::cfg_if! {
                 if #[cfg(feature = "gramine")] {
                     let _ = env.delete(Paht::new(&oldlogfilename));
