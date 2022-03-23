@@ -1062,7 +1062,7 @@ fn open_info_log<E: Env + ?Sized, P: AsRef<Path>>(env: &E, db: P) -> Logger {
             // replace rename usage to reduce big LOG file overload
             cfg_if::cfg_if! {
                 if #[cfg(feature = "gramine")] {
-                    let _ = env.delete(Paht::new(&oldlogfilename));
+                    let _ = env.delete(Path::new(&oldlogfilename));
                 } else { 
                     let _ = env.rename(Path::new(&logfilename), Path::new(&oldlogfilename));
                 }       

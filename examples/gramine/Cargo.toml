@@ -6,5 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rusty-leveldb = { path = "../../" }
+rusty-leveldb = { path = "../../", features = ["gramine"]}
 cfg-if = "1.0.0"

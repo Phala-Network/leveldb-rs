@@ -7,7 +7,7 @@ entrypoint = "file:{{ gramine.libos }}"
 log_level = "{{ log_level }}"
 argv0_override = "gramine"
 
-[loader.eng]
+[loader.env]
 LD_LIBRARY_PATH = "/lib:/lib/x86_64-linux-gnu"
 RUST_BACKTRACE = "full"
 
