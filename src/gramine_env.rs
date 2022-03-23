@@ -95,6 +95,8 @@ impl Env for GramineEnv {
     }
 
     // specific rename used in gramine
+    // FIXME: current implementation doesn't support the old file exists maybe cause some unkown 
+    // bug
     fn rename(&self, old: &Path, new: &Path) -> Result<()> { 
         if let Ok(exists) = self.exists(new) {
             if exists {
@@ -105,9 +107,11 @@ impl Env for GramineEnv {
         let mut old_file = self.open_sequential_file(old)?;
         let mut buffer = Vec::new();
         if let Err(_) = old_file.read_to_end(&mut buffer) {
+            let _ = self.delete(new);
             return err(StatusCode::Corruption, "failed to read data from old file");
         }
         if let Err(e) = new_file.write_all(&buffer) {
+            let _ = self.delete(new);
             return err(StatusCode::Corruption, e.to_string().as_str())?; 
         }
         Ok(())
