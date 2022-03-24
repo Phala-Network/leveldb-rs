@@ -1063,9 +1063,9 @@ fn open_info_log<E: Env + ?Sized, P: AsRef<Path>>(env: &E, db: P) -> Logger {
             cfg_if::cfg_if! {
                 if #[cfg(feature = "gramine")] {
                     let _ = env.delete(Path::new(&oldlogfilename));
-                } else { 
+                } else {
                     let _ = env.rename(Path::new(&logfilename), Path::new(&oldlogfilename));
-                }       
+                }
             }
         }
     }
