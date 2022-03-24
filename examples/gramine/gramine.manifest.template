@@ -29,6 +29,6 @@ trusted_files = [
     "file:gramine",
     "file:/lib/x86_64-linux-gnu/",
 ]
-procted_mrenlave_files = [
+protected_mrenclave_files = [
     "file:data/"
 ]
