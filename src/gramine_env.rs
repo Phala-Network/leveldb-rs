@@ -71,7 +71,6 @@ impl Env for GramineEnv {
     }
 
     fn unlock(&self, l: FileLock) -> Result<()> {
-        //self.0.unlock(l)
         Ok(())
     }
 
@@ -107,6 +106,7 @@ impl Env for GramineEnv {
             let _ = self.delete(new);
             return err(StatusCode::Corruption, e.to_string().as_str())?;
         }
+        let _ = self.delete(old);
         Ok(())
     }
 }

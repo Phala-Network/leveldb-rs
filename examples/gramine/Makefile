@@ -26,6 +26,7 @@ ${BIN_NAME}: ${BIN_FILE}
 
 ${BIN_NAME}.manifest: ${BIN_NAME}.manifest.template
 	mkdir -p data
+	mkdir -p allowed
 	gramine-manifest \
 	    -Dlog_level=all \
 	    $< $@
@@ -46,6 +47,7 @@ clean:
 	$(RM) *.token *.sig *.manifest.sgx *.manifest ${BIN_NAME}.o ${BIN_NAME} OUTPUT
 	# no use for remove the target should cargo clean again 
 	rm -rf data
+	rm -rf allowed
 
 # I think this is no use for the latest version gramine
 .PHONY: sgx_gen_private_key

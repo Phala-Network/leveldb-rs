@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 rusty-leveldb = { path = "../../", features = ["gramine"]}
+#rusty-leveldb = { path = "../../"}
 cfg-if = "1.0.0"

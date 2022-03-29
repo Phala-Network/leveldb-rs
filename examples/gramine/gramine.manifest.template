@@ -16,6 +16,7 @@ mounts = [
     { type = "chroot", path = "/lib", uri = "file:{{ gramine.runtimedir() }}" },
     { type = "chroot", path = "/lib/x86_64-linux-gnu", uri = "file:/lib/x86_64-linux-gnu" },
     { type = "chroot", path = "/data", uri = "file:data" },
+    { type = "chroot", path = "/allowed", uri = "file:allowed" },
 ]
 
 
@@ -28,6 +29,9 @@ trusted_files = [
     "file:{{ gramine.runtimedir() }}/",
     "file:gramine",
     "file:/lib/x86_64-linux-gnu/",
+]
+allowed_files = [
+    "file:allowed/"
 ]
 protected_mrenclave_files = [
     "file:data/"
