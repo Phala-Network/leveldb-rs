@@ -562,9 +562,9 @@ impl VersionSet {
         let len = current.len();
         current.truncate(len - 1);
         let current = Path::new(&current);
-        println!("current file name is {}", current.to_str().unwrap());
+        //println!("current file name is {}", current.to_str().unwrap());
         let descfilename = self.dbname.join(current);
-        println!("current file path is {}", descfilename.to_str().unwrap());
+        //println!("current file path is {}", descfilename.to_str().unwrap());
         let mut builder = Builder::new();
         {
             let mut descfile = self
@@ -603,7 +603,7 @@ impl VersionSet {
                 }
             }
             
-            println!("log number {:?}", &log_number);
+            //println!("log number {:?}", &log_number);
             if let Some(ln) = log_number {
                 self.log_num = ln;
                 self.mark_file_number_used(ln);
