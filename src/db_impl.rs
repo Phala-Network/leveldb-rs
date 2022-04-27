@@ -1052,9 +1052,7 @@ fn lock_file_name(db: &Path) -> PathBuf {
 
 /// open_info_log opens an info log file in the given database. It transparently returns a
 /// /dev/null logger in case the open fails.
-fn open_info_log<E: Env + ?Sized, P: AsRef<Path>>(env: &E, db: P) -> Logger {
-    
-    return Logger(Box::new(io::sink()));
+fn open_info_log<E: Env + ?Sized, P: AsRef<Path>>(env: &E, db: P) -> Logger { 
     let db = db.as_ref();
     let logfilename = db.join("LOG");
     let _ = env.mkdir(Path::new(db));

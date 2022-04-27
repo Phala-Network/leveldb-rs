@@ -70,7 +70,7 @@ impl Env for GramineEnv {
         Ok(lock)
     }
 
-    fn unlock(&self, l: FileLock) -> Result<()> {
+    fn unlock(&self, _l: FileLock) -> Result<()> {
         Ok(())
     }
 
