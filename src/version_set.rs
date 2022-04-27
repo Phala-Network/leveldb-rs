@@ -602,7 +602,7 @@ impl VersionSet {
                     prev_log_number = Some(pln);
                 }
             }
-            
+
             //println!("log number {:?}", &log_number);
             if let Some(ln) = log_number {
                 self.log_num = ln;

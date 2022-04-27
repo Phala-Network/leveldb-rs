@@ -1,7 +1,8 @@
-use std::collections::HashMap;
+use std::{cell::RefCell, collections::HashMap};
 
 use crate::types::{share, SequenceNumber, Shared, MAX_SEQUENCE_NUMBER};
-use std::sync::Arc;
+
+use std::rc::Rc;
 
 /// Opaque snapshot handle; Represents index to SnapshotList.map
 type SnapshotHandle = u64;
@@ -23,12 +24,59 @@ impl Drop for InnerSnapshot {
 
 #[derive(Clone)]
 pub struct Snapshot {
-    inner: Arc<InnerSnapshot>,
+    inner: Rc<InnerSnapshot>,
 }
 
 impl Snapshot {
     pub fn sequence(&self) -> SequenceNumber {
         (*self.inner).seq
+    }
+
+    pub fn take(&self) -> OuterSnapshot {
+        OuterSnapshot {
+            id: self.inner.id.clone(),
+            seq: self.inner.seq.clone(),
+            map: HashMap::new(), // TODO: maybe only read this is nouse for logic
+            newest: self.inner.sl.borrow().newest.clone(),
+            oldest: self.inner.sl.borrow().oldest.clone(),
+        }
+    }
+}
+
+// used for outer application to save the snapshot just for read
+pub struct OuterSnapshot {
+    id: SnapshotHandle,
+    seq: SequenceNumber,
+    map: HashMap<SnapshotHandle, SequenceNumber>,
+    newest: SnapshotHandle,
+    oldest: SnapshotHandle,
+}
+
+impl Clone for OuterSnapshot {
+    fn clone(&self) -> Self {
+        OuterSnapshot {
+            id: self.id.clone(),
+            seq: self.seq.clone(),
+            map: self.map.clone(),
+            newest: self.newest.clone(),
+            oldest: self.oldest.clone(),
+        }
+    }
+}
+
+impl From<OuterSnapshot> for Snapshot {
+    fn from(o: OuterSnapshot) -> Self {
+        Snapshot {
+            inner: Rc::new(InnerSnapshot {
+                id: o.id,
+                seq: o.seq,
+                sl: Rc::new(RefCell::new(InnerSnapshotList {
+                    map: o.map,
+                    newest: o.newest,
+                    oldest: o.oldest,
+                })),
+            }),
+        }
     }
 }
 
@@ -67,7 +115,7 @@ impl SnapshotList {
         }
 
         Snapshot {
-            inner: Arc::new(InnerSnapshot {
+            inner: Rc::new(InnerSnapshot {
                 id: sl.newest,
                 seq,
                 sl: inner,
