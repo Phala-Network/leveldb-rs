@@ -82,3 +82,6 @@ pub use options::{in_memory, CompressionType, Options};
 pub use skipmap::SkipMap;
 pub use types::LdbIterator;
 pub use write_batch::WriteBatch;
+pub mod gramine_env;
+pub use snapshot::Snapshot;
+pub use snapshot::OuterSnapshot;

@@ -1055,11 +1055,18 @@ fn lock_file_name(db: &Path) -> PathBuf {
 fn open_info_log<E: Env + ?Sized, P: AsRef<Path>>(env: &E, db: P) -> Logger {
     let db = db.as_ref();
     let logfilename = db.join("LOG");
-    let oldlogfilename = db.join("LOG.old");
     let _ = env.mkdir(Path::new(db));
     if let Ok(e) = env.exists(Path::new(&logfilename)) {
         if e {
-            let _ = env.rename(Path::new(&logfilename), Path::new(&oldlogfilename));
+            let oldlogfilename = db.join("LOG.old");
+            // replace rename usage to reduce big LOG file overload
+            cfg_if::cfg_if! {
+                if #[cfg(feature = "gramine")] {
+                    let _ = env.delete(Path::new(&oldlogfilename));
+                } else {
+                    let _ = env.rename(Path::new(&logfilename), Path::new(&oldlogfilename));
+                }
+            }
         }
     }
     if let Ok(w) = env.open_writable_file(Path::new(&logfilename)) {
